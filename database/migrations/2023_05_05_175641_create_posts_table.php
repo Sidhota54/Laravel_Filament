@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->string('title');
             $table->string('slug')->unique();
+            $table->string('thumbnali',1000);
             $table->text('content');
             $table->boolean('is_published')->default(false);
             $table->timestamps();

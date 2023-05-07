@@ -1,38 +1,31 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\CategoryResource\RelationManagers;
 
-use App\Filament\Resources\PostResource\Pages;
-use App\Filament\Resources\PostResource\RelationManagers;
-use App\Filament\Resources\PostResource\RelationManagers\TagsRelationManager;
-use App\Models\Post;
-use Closure;
 use Filament\Forms;
-use Filament\Forms\Components\Card;
-use Filament\Forms\Components\TextInput;
+use Closure;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\RichEditor;
 use Filament\Resources\Form;
-use Filament\Resources\Resource;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Forms\Components\Card;
 use Illuminate\Support\Str;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Select;
-use Illuminate\Database\Eloquent\Builder;
-use Filament\Forms\Components\RichEditor;
-use Filament\Tables\Columns\ColorColumn;
-use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\FileUpload;
-use Filament\Tables\Columns\ToggleColumn;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class PostResource extends Resource
+class PostsRelationManager extends RelationManager
 {
-    protected static ?string $model = Post::class;
+    protected static string $relationship = 'posts';
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $recordTitleAttribute = 'title';
 
     public static function form(Form $form): Form
     {
@@ -55,7 +48,6 @@ class PostResource extends Resource
                 ]),
                 Card::make()->schema([
                     FileUpload::make('thumbnali')
-                // SpatieMediaLibraryFileUpload::make('thumbnali')->collection('posts'),
                 ]),
             ]);
     }
@@ -64,39 +56,25 @@ class PostResource extends Resource
     {
         return $table
             ->columns([
+
                 TextColumn::make("id")->sortable(),
                 TextColumn::make("title")->limit('50')->sortable(),
                 TextColumn::make("slug")->limit('50'),
                 ToggleColumn::make('is_published'),
                 ImageColumn::make('thumbnali')->height(50)
-                // SpatieMediaLibraryImageColumn::make('thumbnali')->collection('posts'),
-
-
             ])
             ->filters([
                 //
             ])
+            ->headerActions([
+                Tables\Actions\CreateAction::make(),
+            ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            TagsRelationManager::class
-        ];
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListPosts::route('/'),
-            'create' => Pages\CreatePost::route('/create'),
-            'edit' => Pages\EditPost::route('/{record}/edit'),
-        ];
     }
 }

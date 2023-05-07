@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\CategoryResource\Pages;
 use App\Filament\Resources\CategoryResource\RelationManagers;
+use App\Filament\Resources\CategoryResource\RelationManagers\PostsRelationManager;
 use App\Models\Category;
 use Closure;
 use Filament\Forms;
@@ -60,8 +61,8 @@ class CategoryResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
-        ];
+            PostsRelationManager::class
+          ];
     }
 
     public static function getPages(): array
