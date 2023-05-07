@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\PostResource\Widgets\StatsOverview;
 use App\Filament\Resources\PostResource\Pages;
 use App\Filament\Resources\PostResource\RelationManagers;
 use App\Filament\Resources\PostResource\RelationManagers\TagsRelationManager;
@@ -24,13 +25,17 @@ use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\FileUpload;
 use Filament\Tables\Columns\ToggleColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Tables\Columns\ImageColumn;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Filters\Filter;
+use Illuminate\Database\Eloquent\Builde;
 
 class PostResource extends Resource
 {
     protected static ?string $model = Post::class;
+    protected static ?string $recordTitleAttribute = 'title';
 
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
@@ -65,7 +70,7 @@ class PostResource extends Resource
         return $table
             ->columns([
                 TextColumn::make("id")->sortable(),
-                TextColumn::make("title")->limit('50')->sortable(),
+                TextColumn::make("title")->limit('50')->sortable()->searchable(),
                 TextColumn::make("slug")->limit('50'),
                 ToggleColumn::make('is_published'),
                 ImageColumn::make('thumbnali')->height(50)
@@ -74,7 +79,11 @@ class PostResource extends Resource
 
             ])
             ->filters([
-                //
+                Filter::make('Published')
+                ->query(fn (Builder $query): Builder => $query->where('is_published', true)),
+                Filter::make('Draft')
+                ->query(fn (Builder $query): Builder => $query->where('is_published', false)),
+                SelectFilter::make('category')->relationship('category', 'name')
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -88,6 +97,12 @@ class PostResource extends Resource
     {
         return [
             TagsRelationManager::class
+        ];
+    }
+    public static function getWidgets(): array
+    {
+        return [
+            StatsOverview::class
         ];
     }
 
