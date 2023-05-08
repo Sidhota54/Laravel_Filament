@@ -21,12 +21,10 @@ use Filament\Forms\Components\Select;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\RichEditor;
 use Filament\Tables\Columns\ColorColumn;
-use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\FileUpload;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\SelectFilter;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Tables\Columns\ImageColumn;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Filters\Filter;
@@ -59,8 +57,7 @@ class PostResource extends Resource
                     RichEditor::make('content'),
                 ]),
                 Card::make()->schema([
-                    FileUpload::make('thumbnali')
-                // SpatieMediaLibraryFileUpload::make('thumbnali')->collection('posts'),
+                    FileUpload::make('thumbnali'),
                 ]),
             ]);
     }
@@ -74,7 +71,6 @@ class PostResource extends Resource
                 TextColumn::make("slug")->limit('50'),
                 ToggleColumn::make('is_published'),
                 ImageColumn::make('thumbnali')->height(50)
-                // SpatieMediaLibraryImageColumn::make('thumbnali')->collection('posts'),
 
 
             ])

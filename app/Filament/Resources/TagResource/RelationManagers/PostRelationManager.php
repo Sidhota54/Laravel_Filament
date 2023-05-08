@@ -49,7 +49,6 @@ class PostRelationManager extends RelationManager
                 ]),
                 Card::make()->schema([
                     FileUpload::make('thumbnali')
-                // SpatieMediaLibraryFileUpload::make('thumbnali')->collection('posts'),
                 ]),
             ]);
     }
