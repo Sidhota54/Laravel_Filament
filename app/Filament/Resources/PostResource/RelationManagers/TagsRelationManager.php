@@ -2,6 +2,9 @@
 
 namespace App\Filament\Resources\PostResource\RelationManagers;
 
+use App\Models\Post;
+
+use App\Models\Tag;
 use Closure;
 use Filament\Forms;
 use Filament\Resources\Form;
@@ -14,6 +17,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\App;
 
 class TagsRelationManager extends RelationManager
 {
@@ -43,19 +47,23 @@ class TagsRelationManager extends RelationManager
                 TextColumn::make("name")->limit('50')->sortable(),
                 TextColumn::make("slug")->limit('50'),
             ])
-            ->filters([
-                //
-            ])
+            // ->filters([
+            //     //
+            // ])
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
-                // Tables\Actions\AttachAction::make(),
+                Tables\Actions\AttachAction::make()->preloadRecordSelect(),
+
+
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                // Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DetachAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                // Tables\Actions\DeleteBulkAction::make(),
+                Tables\Actions\DetachBulkAction::make(),
             ]);
     }
 }

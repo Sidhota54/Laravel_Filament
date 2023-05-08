@@ -24,7 +24,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class PostRelationManager extends RelationManager
 {
-    protected static string $relationship = 'post';
+    protected static string $relationship = 'posts';
 
     protected static ?string $recordTitleAttribute = 'title';
 
@@ -68,13 +68,20 @@ class PostRelationManager extends RelationManager
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
+                Tables\Actions\AttachAction::make()->preloadRecordSelect(),
+                // Tables\Actions\DeleteAction::make(),
+
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                // Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DetachAction::make(),
+
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
+                Tables\Actions\DetachBulkAction::make(),
+
             ]);
     }
 }
